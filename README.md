@@ -11,7 +11,7 @@ Option C: GitHub Pages
 - **Change pricing:** search for "$" in index.html
 - **Change date:** search for "Next date coming soon" in index.html
 - **Add testimonial:** copy a proof-card div and edit text
-- **Swap Stripe link:** search for `STRIPE_LINK_TBD` and replace with the real Payment Link URL (occurs once per variant, on the "Reserve Your Spot" CTA)
+- **Swap Stripe link:** find the `data-cta="reserve"` anchor per variant (Open Build Day card) and update the `href`. Currently `https://buy.stripe.com/4gMfZh3W4b0O5Ef3FZ0x201`.
 - **Swap Cal link:** find the two `data-cta="book"` anchors per variant (Private Build Day card + footer CTA) and update the `href`. Currently `https://cal.com/alexsky/build-day-discovery`.
 
 ## To switch the primary variant
@@ -53,10 +53,7 @@ python -m http.server 8123
 
 ## Links to set up
 
-1. **Stripe Payment Link:** Create at dashboard.stripe.com/payment-links
-   - Product: "AI Build Day - Open Session"
-   - Price: $750
-   - Allow quantity adjustment
+1. **Stripe Payment Link:** ✅ Live at `https://buy.stripe.com/4gMfZh3W4b0O5Ef3FZ0x201` — "AI Build Day - Open Session", $750 USD one-time, quantity 1–4 seats, promo codes enabled, billing address collected (Stripe product `prod_UUvH1mSEwJlWhi`, price `price_1TVvRRGPDL8kFGK4mtGnY7Qx`, payment link `plink_1TVvRaGPDL8kFGK4JrG7wHkv`, **livemode**)
 2. **Cal.com booking:** ✅ Live at `https://cal.com/alexsky/build-day-discovery` — "AI Build Day — Discovery Call", 30 min, Cal Video, 2h min notice, auto-confirm (event type id `5656599`)
 
 ## Live URL
