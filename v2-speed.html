@@ -18,7 +18,7 @@
         }
     </script>
 </head>
-<body class="bg-white text-gray-900 font-sans">
+<body class="bg-white text-gray-900 font-sans" data-variant="v2">
 
     <!-- Hero -->
     <section class="min-h-[70vh] flex items-center justify-center px-6 py-20">
@@ -102,7 +102,7 @@
                         <li>Full day, hands-on</li>
                     </ul>
                     <p class="text-2xl font-bold mb-4">$750<span class="text-base font-normal text-gray-500"> / person</span></p>
-                    <a href="STRIPE_LINK_TBD" class="block text-center bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition">
+                    <a href="STRIPE_LINK_TBD" data-cta="reserve" class="block text-center bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition">
                         Reserve Your Spot
                     </a>
                     <p class="text-sm text-gray-400 text-center mt-3">Next date coming soon</p>
@@ -118,7 +118,7 @@
                         <li>Custom to your business</li>
                     </ul>
                     <p class="text-2xl font-bold mb-4">Custom<span class="text-base font-normal text-gray-500"> / let's talk</span></p>
-                    <a href="#" class="block text-center bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition">
+                    <a href="https://cal.com/alexsky/build-day-discovery" data-cta="book" class="block text-center bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition">
                         Book a Call
                     </a>
                     <p class="text-sm text-gray-400 text-center mt-3">30-minute discovery call</p>
@@ -190,7 +190,7 @@
     <section class="px-6 py-20 bg-gray-900 text-white text-center">
         <div class="max-w-2xl mx-auto">
             <h2 class="text-2xl font-bold mb-4">Want to talk about what this could look like for your team?</h2>
-            <a href="#" class="inline-block bg-white text-gray-900 px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-100 transition">
+            <a href="https://cal.com/alexsky/build-day-discovery" data-cta="book" class="inline-block bg-white text-gray-900 px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-100 transition">
                 Book a Call
             </a>
         </div>
@@ -200,5 +200,30 @@
         Alex Salinsky
     </footer>
 
+    <!-- Analytics. Provider-agnostic. See README "Analytics" for setup.
+         To enable Plausible: replace REPLACE_WITH_DOMAIN with the live domain (e.g. aibuildday.com)
+                              once the Plausible site is created.
+         To use GA4 instead:  delete the Plausible <script> tag and paste the GA4 gtag.js snippet
+                              above the inline tracker. Events fire via either window.plausible()
+                              or window.gtag() if loaded, no-op otherwise. -->
+    <script defer data-domain="REPLACE_WITH_DOMAIN" src="https://plausible.io/js/script.tagged-events.js"></script>
+    <script>
+      (function () {
+        var variant = (document.body && document.body.dataset.variant) || 'unknown';
+        function track(name, props) {
+          props = Object.assign({ variant: variant }, props || {});
+          if (typeof window.plausible === 'function') {
+            window.plausible(name, { props: props });
+          } else if (typeof window.gtag === 'function') {
+            window.gtag('event', name.replace(/\s+/g, '_'), props);
+          }
+        }
+        document.addEventListener('click', function (e) {
+          var el = e.target.closest('[data-cta]');
+          if (!el) return;
+          track('CTA Click', { cta: el.dataset.cta });
+        });
+      })();
+    </script>
 </body>
 </html>

@@ -12,7 +12,44 @@ Option C: GitHub Pages
 - **Change date:** search for "Next date coming soon" in index.html
 - **Add testimonial:** copy a proof-card div and edit text
 - **Swap Stripe link:** search for `STRIPE_LINK_TBD` and replace with the real Payment Link URL (occurs once per variant, on the "Reserve Your Spot" CTA)
-- **Swap Cal link:** replace the href on both "Book a Call" buttons + footer CTA
+- **Swap Cal link:** find the two `data-cta="book"` anchors per variant (Private Build Day card + footer CTA) and update the `href`. Currently `https://cal.com/alexsky/build-day-discovery`.
+
+## To switch the primary variant
+
+`index.html` is what's served at `/`. The other variants stay reachable at `/v2-speed.html`, `/v3-pain.html`, `/v4-cohort.html`. To promote a different variant to primary:
+
+1. Copy the variant file you want over `index.html` (e.g. `cp v3-pain.html index.html`).
+2. The `data-variant` attribute on `<body>` keeps the file's original tag (v1/v2/v3/v4), so analytics still distinguish "which variant ran as primary" in events.
+3. Commit + push. GitHub Pages redeploys automatically.
+
+To rename or add a new variant, mirror the same three CTA `data-cta` attributes (`reserve`, `book`, `book`) and the `data-variant` on `<body>`. The analytics block at the bottom of each file is identical and does the rest.
+
+## Analytics
+
+Click events fire on the two CTAs (`Reserve Your Spot`, `Book a Call`) across all variants. The wiring is **provider-agnostic** — works with Plausible or GA4, no-ops if neither is loaded.
+
+**Event:** `CTA Click` with props `{ variant: 'v1'|'v2'|'v3'|'v4', cta: 'reserve'|'book' }`
+
+### Option A — Plausible (recommended for static site)
+
+1. Sign up at https://plausible.io (or self-host) and add the live domain.
+2. In each `*.html` file, replace `data-domain="REPLACE_WITH_DOMAIN"` on the Plausible `<script>` tag with the live domain.
+3. Events flow to the Plausible dashboard under "Goals → Custom Events → CTA Click".
+
+### Option B — GA4
+
+1. Create a GA4 property and copy the gtag.js snippet.
+2. In each `*.html` file, delete the Plausible `<script>` tag and paste the GA4 snippet above the inline tracker.
+3. Events flow as GA4 event name `CTA_Click` with `variant` and `cta` as parameters (register them as custom dimensions in GA4 Admin → Custom definitions).
+
+### Verifying analytics locally
+
+```bash
+python -m http.server 8123
+# Open http://127.0.0.1:8123/index.html, click Reserve / Book.
+# Plausible script will 404 on REPLACE_WITH_DOMAIN until configured — that is expected.
+# The inline tracker still no-ops cleanly; the click navigation is unaffected.
+```
 
 ## Links to set up
 
@@ -20,7 +57,7 @@ Option C: GitHub Pages
    - Product: "AI Build Day - Open Session"
    - Price: $750
    - Allow quantity adjustment
-2. **Cal.com booking:** Create a 30-min "Build Day Discovery Call" event type
+2. **Cal.com booking:** ✅ Live at `https://cal.com/alexsky/build-day-discovery` — "AI Build Day — Discovery Call", 30 min, Cal Video, 2h min notice, auto-confirm (event type id `5656599`)
 
 ## Live URL
 
